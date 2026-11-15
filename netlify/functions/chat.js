@@ -18,8 +18,11 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
-        reply: "Welcome to NOVA AI! Your backend is working."
+        reply: "NOVA AI backend is ready. AI connection is the next step."
       })
     };
   } catch {
@@ -29,4 +32,3 @@ exports.handler = async (event) => {
     };
   }
 };
-
