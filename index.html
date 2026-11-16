@@ -128,7 +128,7 @@ b.classList.add("thinking");
     b.textContent = "Connection error. Please try again.";
   }
 
-  chat.scrollTop = chat.scrollHeight;
-});
+  histories[active] = chat.innerHTML;
+chat.scrollTop = chat.scrollHeight;
  </script>
 </body></html>
