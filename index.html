@@ -76,11 +76,45 @@ document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=
  document.getElementById("toolTitle").textContent=descriptions[active];
  chat.innerHTML='<div class="msg bot">You selected '+active+'. This is a sample screen. A real AI connection will be added after testing the design and choosing a suitable provider.</div>';
 }));
-document.getElementById("form").addEventListener("submit",e=>{
- e.preventDefault();const box=document.getElementById("prompt");const value=box.value.trim();if(!value)return;
- const u=document.createElement("div");u.className="msg user";u.textContent=value;chat.appendChild(u);
- const b=document.createElement("div");b.className="msg bot";b.textContent="Thanks — your message is visible in this prototype. Live AI replies are not connected yet. Our next development step is to connect a suitable AI service securely.";chat.appendChild(b);
- box.value="";chat.scrollTop=chat.scrollHeight;
+
+document.getElementById("form").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const box = document.getElementById("prompt");
+  const value = box.value.trim();
+  if (!value) return;
+
+  const u = document.createElement("div");
+  u.className = "msg user";
+  u.textContent = value;
+  chat.appendChild(u);
+
+  const b = document.createElement("div");
+  b.className = "msg bot";
+  b.textContent = "Connecting to NOVA AI...";
+  chat.appendChild(b);
+
+  box.value = "";
+
+  try {
+    const response = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: value })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+
+    b.textContent = data.reply;
+  } catch (error) {
+    b.textContent = "Connection error. Please try again.";
+  }
+
+  chat.scrollTop = chat.scrollHeight;
 });
-</script>
+ </script>
 </body></html>
