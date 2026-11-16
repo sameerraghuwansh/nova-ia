@@ -84,11 +84,10 @@ document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=
  btn.classList.add("active");
 histories[active] = chat.innerHTML;
 active = btn.dataset.tool;
-chat.innerHTML = histories[active] || '<div class="msg bot">Start a new conversation!</div>';
- document.getElementById("activeTitle").textContent=btn.querySelector("b").textContent;
- document.getElementById("toolTitle").textContent=descriptions[active];
- chat.innerHTML='<div class="msg bot">You selected '+active+'. This is a sample screen. A real AI connection will be added after testing the design and choosing a suitable provider.</div>';
-}));
+chat.innerHTML = histories[active] || '<div class="msg bot">You selected ' + active + '. Start a new conversation!</div>';
+
+document.getElementById("activeTitle").textContent = btn.querySelector("b").textContent;
+document.getElementById("toolTitle").textContent = descriptions[active];
 
 document.getElementById("form").addEventListener("submit", async e => {
   e.preventDefault();
@@ -129,6 +128,6 @@ b.classList.add("thinking");
   }
 
   histories[active] = chat.innerHTML;
-chat.scrollTop = chat.scrollHeight;
+chat.scrollTop = chat.scrollHeight;});
  </script>
 </body></html>
