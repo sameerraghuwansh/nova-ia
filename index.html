@@ -1,50 +1,36 @@
+<script>
 const descriptions = {
   Chat: "Ask questions, explore ideas and get explanations.",
-  Translate: "Write text and choose the languages you want to translate between.",
-  Write: "Draft emails, stories, product descriptions and more.",
-  Images: "Describe an image concept. Image generation will be connected later.",
-  Code: "Ask for help understanding code or planning a software project.",
-  Learn: "Choose a topic and ask for a simple step-by-step explanation."
+  Translate: "Translate between languages.",
+  Write: "Draft emails, stories and more.",
+  Images: "Describe image concepts.",
+  Code: "Get help understanding code.",
+  Learn: "Learn topics step by step."
 };
 
 let active = "Chat";
-
 const chat = document.getElementById("chat");
-const histories = {
-  Chat: chat.innerHTML
-};
+const histories = { Chat: chat.innerHTML };
 
 document.getElementById("clearChat").addEventListener("click", () => {
-  chat.innerHTML =
-    '<div class="msg bot">Chat cleared. Welcome back to NOVA AI!</div>';
+  chat.innerHTML = '<div class="msg bot">Chat cleared!</div>';
   histories[active] = chat.innerHTML;
 });
 
 document.querySelectorAll(".tile").forEach(btn => {
   btn.addEventListener("click", () => {
     histories[active] = chat.innerHTML;
-
-    document.querySelectorAll(".tile").forEach(x =>
-      x.classList.remove("active")
-    );
-
+    document.querySelectorAll(".tile").forEach(x => x.classList.remove("active"));
     btn.classList.add("active");
     active = btn.dataset.tool;
-
-    chat.innerHTML = histories[active] ||
-      '<div class="msg bot">You selected ' + active + '. Start a new conversation!</div>';
-
-    document.getElementById("activeTitle").textContent =
-      btn.querySelector("b").textContent;
-
-    document.getElementById("toolTitle").textContent =
-      descriptions[active];
+    chat.innerHTML = histories[active] || '<div class="msg bot">Start a new conversation!</div>';
+    document.getElementById("activeTitle").textContent = btn.querySelector("b").textContent;
+    document.getElementById("toolTitle").textContent = descriptions[active];
   });
 });
 
 document.getElementById("form").addEventListener("submit", async e => {
   e.preventDefault();
-
   const box = document.getElementById("prompt");
   const value = box.value.trim();
   if (!value) return;
@@ -58,7 +44,6 @@ document.getElementById("form").addEventListener("submit", async e => {
   b.className = "msg bot";
   b.textContent = "NOVA AI is thinking...";
   chat.appendChild(b);
-
   box.value = "";
 
   try {
@@ -67,13 +52,8 @@ document.getElementById("form").addEventListener("submit", async e => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: value })
     });
-
     const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Request failed");
-    }
-
+    if (!response.ok) throw new Error("Request failed");
     b.textContent = data.reply;
   } catch (error) {
     b.textContent = "Connection error. Please try again.";
@@ -82,5 +62,5 @@ document.getElementById("form").addEventListener("submit", async e => {
   histories[active] = chat.innerHTML;
   chat.scrollTop = chat.scrollHeight;
 });
- </script>
-</body></html>
+</script>
+    </body></html>
