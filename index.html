@@ -49,7 +49,13 @@ select,button,textarea{font:inherit}.lang{background:#121a2d;color:var(--text);b
 <section class="card">
  <div class="cardhead"><h2 id="activeTitle">✦ AI Chat</h2><span class="tag">PROTOTYPE</span></div>
  <p id="toolTitle">What would you like to explore today?</p>
- <div class="chat" id="chat" aria-live="polite"><div class="msg bot">Welcome to NOVA AI. I'm a prototype demo. Try asking: “Give me three ideas for a small business.”</div></div>
+ <div class="cardhead">
+  <span></span>
+  <button type="button" id="clearChat" class="send">Clear Chat</button>
+</div>
+<div class="chat" id="chat" aria-live="polite">
+  <div class="msg bot">Welcome to NOVA AI. I'm a prototype demo. Ask me anything!</div>
+</div>
  <form class="entry" id="form">
   <textarea id="prompt" placeholder="Message NOVA AI…" rows="1"></textarea>
   <button class="send" type="submit">Send</button>
