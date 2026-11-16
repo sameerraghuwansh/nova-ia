@@ -69,66 +69,98 @@ If you are under 18, use this service with parent or guardian permission.
 </div>
 
 <script>
-const descriptions={  
- Chat:"Ask questions, explore ideas and get explanations.",  
- Translate:"Write text and choose the languages you want to translate between.",  
- Write:"Draft emails, stories, product descriptions and more.",  
- Images:"Describe an image concept. Image generation will be connected in a later version.",  
- Code:"Ask for help understanding code or planning a software project.",  
- Learn:"Choose a topic and ask for a simple step-by-step explanation."  
-};  
-let active="Chat";  
-const chat=document.getElementById("chat");  
-const histories = { Chat: chat.innerHTML }; document.getElementById("clearChat").addEventListener("click", () => {  
-  chat.innerHTML = '<div class="msg bot">Chat cleared. Welcome back to NOVA AI!</div>';  
-});  
-document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=>{  
- document.querySelectorAll(".tile").forEach(x=>x.classList.remove("active"));  
- btn.classList.add("active");
-histories[active] = chat.innerHTML;active = btn.dataset.tool;  
- document.getElementById("activeTitle").textContent=btn.querySelector("b").textContent;  
- document.getElementById("toolTitle").textContent=descriptions[active];  
- document.getElementById("form").addEventListener("submit", async e => {
-e.preventDefault();
 
-const box = document.getElementById("prompt");
-const value = box.value.trim();
-if (!value) return;
+const descriptions = {
+  Chat: "Ask questions, explore ideas and get explanations.",
+  Translate: "Write text and choose the languages you want to translate between.",
+  Write: "Draft emails, stories, product descriptions and more.",
+  Images: "Describe an image concept. Image generation will be connected in a later version.",
+  Code: "Ask for help understanding code or planning a software project.",
+  Learn: "Choose a topic and ask for a simple step-by-step explanation."
+};
 
-const u = document.createElement("div");
-u.className = "msg user";
-u.textContent = value;
-chat.appendChild(u);
+let active = "Chat";
+const chat = document.getElementById("chat");
 
-const b = document.createElement("div");
-b.className = "msg bot";
-b.textContent = "NOVA AI is thinking...";
-b.classList.add("thinking");
-chat.appendChild(b);
+const histories = {
+  Chat: chat.innerHTML
+};
 
-box.value = "";
-
-try {
-const response = await fetch("/.netlify/functions/chat", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ message: value })
+// Clear the current tool's conversation
+document.getElementById("clearChat").addEventListener("click", () => {
+  chat.innerHTML =
+    '<div class="msg bot">Chat cleared. Welcome back!</div>';
+  histories[active] = chat.innerHTML;
 });
 
-const data = await response.json();  
+// Switch tools and restore their conversations
+document.querySelectorAll(".tile").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tile").forEach(x =>
+      x.classList.remove("active")
+    );
 
-if (!response.ok) {  
-  throw new Error(data.error || "Request failed");  
-}  
+    btn.classList.add("active");
 
-b.textContent = data.reply;
+    histories[active] = chat.innerHTML;
+    active = btn.dataset.tool;
 
-} catch (error) {
-b.textContent = "Connection error. Please try again.";
-}
+    document.getElementById("activeTitle").textContent =
+      btn.querySelector("b").textContent;
 
-chat.scrollTop = chat.scrollHeight;
+    document.getElementById("toolTitle").textContent =
+      descriptions[active];
+
+    chat.innerHTML = histories[active] ||
+      '<div class="msg bot">You selected ' + active +
+      '. Start a new conversation!</div>';
+  });
 });
+
+// Send messages to the Netlify function
+document.getElementById("form").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const box = document.getElementById("prompt");
+  const value = box.value.trim();
+
+  if (!value) return;
+
+  const u = document.createElement("div");
+  u.className = "msg user";
+  u.textContent = value;
+  chat.appendChild(u);
+
+  const b = document.createElement("div");
+  b.className = "msg bot";
+  b.textContent = "NOVA AI is thinking...";
+  chat.appendChild(b);
+
+  box.value = "";
+
+  try {
+    const response = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: value })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+
+    b.textContent = data.reply;
+
+  } catch (error) {
+    b.textContent = "Connection error. Please try again.";
+  }
+
+  histories[active] = chat.innerHTML;
+  chat.scrollTop = chat.scrollHeight;
+});
+    
 </script>
 </body>
 </html>
