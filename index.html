@@ -75,7 +75,8 @@ const descriptions={
  Learn:"Choose a topic and ask for a simple step-by-step explanation."
 };
 let active="Chat";
-const chat=document.getElementById("chat"); document.getElementById("clearChat").addEventListener("click", () => {
+const chat=document.getElementById("chat");
+const histories = { Chat: chat.innerHTML }; document.getElementById("clearChat").addEventListener("click", () => {
   chat.innerHTML = '<div class="msg bot">Chat cleared. Welcome back to NOVA AI!</div>';
 });
 document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=>{
