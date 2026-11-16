@@ -88,8 +88,7 @@ document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=
 histories[active] = chat.innerHTML;active = btn.dataset.tool;  
  document.getElementById("activeTitle").textContent=btn.querySelector("b").textContent;  
  document.getElementById("toolTitle").textContent=descriptions[active];  
- chat.innerHTML='<div class="msg bot">You selected '+active+'. This is a sample screen. A real AI connection will be added after testing the design and choosing a suitable provider.</div>';  
-}));  document.getElementById("form").addEventListener("submit", async e => {
+ document.getElementById("form").addEventListener("submit", async e => {
 e.preventDefault();
 
 const box = document.getElementById("prompt");
