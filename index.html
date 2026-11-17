@@ -14,6 +14,22 @@
 select,button,textarea{font:inherit}.lang{background:#121a2d;color:var(--text);border:1px solid var(--line);padding:9px 10px;border-radius:12px;max-width:145px}
 .hero{padding:22px 4px 18px}.eyebrow{color:var(--accent2);font-size:11px;letter-spacing:2px;font-weight:800}.hero h1{font-size:clamp(29px,7vw,46px);line-height:1.1;margin:9px 0 10px;letter-spacing:-1.5px}.gradient{background:linear-gradient(90deg,#b5aaff,#66e8d8);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:580px;margin:0}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:18px 0}
+.tile{background:linear-gradient(145deg,#17213a,#101729);border:1px solid var(--line);border-radius:17px;padding:15px;text-align:left;color:var(--text);cursor:pointer;min-height:115px;transition:.15s}doctype html>
+<\html lang=<"en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d19">
+<title>NOVA AI — Prototype</title>
+<\style>
+:root{--bg:#090d19;--panel:#11182a;--panel2:#172139;--line:#26324c;--text:#f3f6ff;--muted:#9aa8c4;--accent:#8b7cff;--accent2:#42d6c5}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#29305d 0%,#090d19 48%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+.wrap{max-width:920px;margin:auto;padding:18px 14px 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#8b7cff,#42d6c5);display:grid;place-items:center;color:#080d19;font-weight:900;font-size:20px;box-shadow:0 8px 28px #7164ff44}
+.brand strong{font-size:19px;letter-spacing:1.5px}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:.3px}
+select,button,textarea{font:inherit}.lang{background:#121a2d;color:var(--text);border:1px solid var(--line);padding:9px 10px;border-radius:12px;max-width:145px}
+.hero{padding:22px 4px 18px}.eyebrow{color:var(--accent2);font-size:11px;letter-spacing:2px;font-weight:800}.hero h1{font-size:clamp(29px,7vw,46px);line-height:1.1;margin:9px 0 10px;letter-spacing:-1.5px}.gradient{background:linear-gradient(90deg,#b5aaff,#66e8d8);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{color:var(--muted);max-width:580px;margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:18px 0}
 .tile{background:linear-gradient(145deg,#17213a,#101729);border:1px solid var(--line);border-radius:17px;padding:15px;text-align:left;color:var(--text);cursor:pointer;min-height:115px;transition:.15s}
 .tile:active,.tile.active{border-color:var(--accent);transform:scale(.99);background:#202448}.ico{font-size:22px}.tile b{display:block;margin:8px 0 2px}.tile span:last-child{color:var(--muted);font-size:12px}
 .card{background:#10182a;border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:15px;box-shadow:0 16px 50px #0003}
@@ -76,7 +92,9 @@ document.querySelectorAll(".tile").forEach(btn=>btn.addEventListener("click",()=
  document.getElementById("toolTitle").textContent=descriptions[active];
  chat.innerHTML='<div class="msg bot">You selected '+active+'. This is a sample screen. A real AI connection will be added after testing the design and choosing a suitable provider.</div>';
 }));
-document.getElementById("form").addEventListener("submit", async e => {
+
+
+document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const box = document.getElementById("prompt");
@@ -96,20 +114,26 @@ document.getElementById("form").addEventListener("submit", async e => {
   box.value = "";
 
   try {
-    const response = await fetch("/.netlify/functions/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: value })
-    });
+    const response = await fetch(
+      "https://gzdxtsdkwatbtynwyjme.supabase.co/functions/v1/Nova-ia-",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_zQnzADihNB1TA7cnEREHFw_0kmfxzPw",
+        },
+        body: JSON.stringify({ message: value })
+      }
+    );
 
     const data = await response.json();
-
-    if (!response.ok) throw new Error(data.error || "Request failed");
+    if (!response.ok) throw new Error(data.error);
 
     b.textContent = data.reply;
   } catch (error) {
     b.textContent = "Connection error. Please try again.";
   }
-  });
+});
+  
 </script>
-</body></html> 
+</body></html>
